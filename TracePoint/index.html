@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TracePoint | IP & Phone Validator</title>
+    <meta name="description" content="Seamlessly locate IP addresses and validate phone numbers in real-time.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Top Left Branding -->
+    <div class="top-left-branding">
+        <img src="assets/images/logo.png" alt="TracePoint Logo" class="branding-logo">
+        <span class="branding-quote">"Vibe Coding Project 101 TracePoint"</span>
+    </div>
+
+    <main class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fa-solid fa-radar"></i>
+                <h1>TracePoint</h1>
+            </div>
+            <p>Advanced IP Geolocation & Phone Validation</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- IP Locator Card -->
+            <section class="glass-card" id="ip-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-network-wired"></i> IP Locator</h2>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" id="ip-input" placeholder="Enter IP address (e.g. 8.8.8.8)" aria-label="IP Address Input">
+                        <button id="ip-btn" class="primary-btn">
+                            <i class="fa-solid fa-search"></i> Locate
+                        </button>
+                    </div>
+                    <button id="my-ip-btn" class="text-btn">
+                        <i class="fa-solid fa-location-crosshairs"></i> Locate My IP
+                    </button>
+                    
+                    <div class="results-container hidden" id="ip-results">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">IP Address</span>
+                                <span class="value" id="res-ip">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Location</span>
+                                <span class="value" id="res-location">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">ISP</span>
+                                <span class="value" id="res-isp">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Timezone</span>
+                                <span class="value" id="res-timezone">-</span>
+                            </div>
+                        </div>
+                        <div id="map" class="map-container"></div>
+                    </div>
+                    
+                    <div class="loader hidden" id="ip-loader">
+                        <div class="spinner"></div>
+                        <p>Tracing IP...</p>
+                    </div>
+                    <div class="error-msg hidden" id="ip-error"></div>
+                </div>
+            </section>
+
+            <!-- Phone Validator Card -->
+            <section class="glass-card" id="phone-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-phone"></i> Phone Validator</h2>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="tel" id="phone-input" placeholder="Enter phone (e.g. +1234567890)" aria-label="Phone Number Input">
+                        <button id="phone-btn" class="primary-btn">
+                            <i class="fa-solid fa-check-double"></i> Validate
+                        </button>
+                    </div>
+                    <p class="hint">Include country code (e.g., +1 for US, +44 for UK)</p>
+
+                    <div class="results-container hidden" id="phone-results">
+                        <div class="status-badge" id="phone-status-badge">
+                            <i class="fa-solid fa-circle-check"></i> Valid Number
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">International Format</span>
+                                <span class="value" id="res-phone-intl">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Country</span>
+                                <span class="value" id="res-phone-country">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Number Type</span>
+                                <span class="value" id="res-phone-type">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">National Format</span>
+                                <span class="value" id="res-phone-national">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="loader hidden" id="phone-loader">
+                        <div class="spinner"></div>
+                        <p>Validating number...</p>
+                    </div>
+                    <div class="error-msg hidden" id="phone-error"></div>
+                </div>
+            </section>
+        </div>
+        
+        <footer class="footer">
+            <p>Built by <span class="highlight">Hasnan Sharief</span></p>
+            <p class="tech-stack">Tech Stack: HTML5, CSS3 Glassmorphism, Vanilla JS, Leaflet, ipstack & APILayer APIs</p>
+        </footer>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
